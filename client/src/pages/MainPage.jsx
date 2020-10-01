@@ -25,13 +25,7 @@ render(){
              <Subtitle>hello teste de styled syntaxe assez particulier </Subtitle>
 
         </Wrapper>
-
-        
-
-
     )
-
-
 }
 
 
