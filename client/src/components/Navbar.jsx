@@ -4,10 +4,13 @@ import styled from 'styled-components'
 
 const Container= styled.div.attrs({
     className:'container'
-})`background-color: red`
+})` background-color: grey;
+    border: 2px solid black ;
+    border-radius: 20px
+`
 const Nav= styled.nav.attrs({
 
-    className:'navbar navbar-expand-lg navbar-dark bg-dark'
+    className:'navbar navbar-expand-lg navbar-dark bg-dark '
 })`margin : 20px`
 
 class Navbar extends Component{
@@ -16,7 +19,7 @@ class Navbar extends Component{
 
         <Container>
                 <Nav>
-                   <h1>Pokedex</h1>
+                   <h1>Hello Welcome to your personal pokemon database POKEDEX</h1>
                 </Nav>
             </Container>  
         )
