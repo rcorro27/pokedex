@@ -1,27 +1,32 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import {Logo,Titres,Search} from '../components'
+//import Titres from './Titres'
 
 
-const Container= styled.div.attrs({
-    className:'container'
-})` background-color: grey;
-    border: 2px solid black ;
-    border-radius: 20px
+
+const Container = styled.div.attrs({
+    className: 'container',
+})``
+
+const Nav = styled.nav.attrs({
+    className: 'navbar navbar-light bg-light',
+})`
+    margin-bottom: 20 px;
 `
-const Nav= styled.nav.attrs({
-
-    className:'navbar navbar-expand-lg navbar-dark bg-dark '
-})`margin : 20px`
 
 class Navbar extends Component{
     render(){
         return(
 
+            
         <Container>
                 <Nav>
-                   <h1>Hello Welcome to your personal pokemon database POKEDEX</h1>
+                    <Logo/>
+                    <Search/>
+                    
                 </Nav>
-            </Container>  
+        </Container>  
         )
     }
 
