@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import axios from 'axios';
+
+
 
 const Wrapper = styled.div.attrs({
     className: 'form-group',
@@ -21,7 +24,7 @@ const Img = styled.img.attrs( props => ({
     alt: props.alt
 }))` margin: 20px`
 
-const TableauImages=[20]
+const TableauImages=[1,2,3,4,5,6,7,8,10]
 
 class MainPage extends Component{
     constructor(props){
@@ -32,24 +35,39 @@ class MainPage extends Component{
         }
     }
     componentDidMount(){
-
+        if (this.state.pokemon =='') {
+            
+            axios.get('./pokemons.json')
+            .then(res => {
+                const pokemon = res.data;
+                console.log(pokemon)
+                this.setState({ pokemon : pokemon });
+            })   
+        }
     }
     
    
 
 render(){
+    console.log(this.state)
     return(
-        <div>
-          {}
-                <Img src="pokedex\client\src\images\pokemon_"+ {} +".png" className="img-thumbnail" alt=""/>
+      /*  <div>
+          {TableauImages.map((info,index) => {      
+             return <Img src={require("../images/pokemon_"+info+".png")} className="img-thumbnail w-25" alt="" key={index}/>
+            //  C:\Users\Richard\projectos personales\pokedex\client\src\images\pokemon_1.png
+          })}
          
         <Wrapper>
-            <Title>Welcome Young Avdenture</Title>
+            <Title>Welcome Young Avdentured</Title>
              <Subtitle>hello teste de styled syntaxe assez particulier </Subtitle>
         </Wrapper>
         
             
-        </div>
+        </div>*/
+        <Wrapper>
+            <Title>Welcome Young Avdentured</Title>
+             <Subtitle>hello teste de styled syntaxe assez particulier </Subtitle>
+        </Wrapper>
     )
 }
 
