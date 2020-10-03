@@ -25,7 +25,7 @@ const A = styled.a.attrs( props => ({
 
 }))`margin: 5px`
 
-const TableauImages=[1,2,3,4,5,6,7,8,10]
+
 
 class MainPage extends Component{
     constructor(props){
@@ -36,21 +36,25 @@ class MainPage extends Component{
         }
     }
     componentDidMount(){
-        if (this.state.pokemon =='') {
-            
+       
+        if (Object.keys(this.state.pokemon).length == 0 ) {
             axios.get('./pokemons.json')
             .then(res => {
                 const pokemon = res.data;
                 console.log(pokemon)
                 this.setState({ pokemon : pokemon });
             })   
+        }else{
+            console.log("pas dans le if ")
+            
         }
     }
     
    
 
 render(){
-    console.log(this.state)
+    console.log("state",this.state)
+    console.log("lenght apres le if ",Object.keys(this.state.pokemon).length)
     return(
         
       /*  <div>
@@ -61,12 +65,12 @@ render(){
         </div>*/
         <Wrapper className=".container">
             <Title>Welcome Young Adventured</Title>
-            <p className="p w-75 bg-light">Don't know which pokemon to search?? you can select by type  :</p>
-            <Wrapper className="list-group w-50">
+            
+            {/*<Wrapper className="list-group w-50">
                 {(this.state.pokemon ==='') ? '' : this.state.pokemon.results.map((info,index) => {      
                 return <A className="list-group-item list-group-item-action w-25 rounded shadow-sm" href={info.url} key={index} >{info.name} </A>
                 })}
-            </Wrapper>
+            </Wrapper>*/}
              
         </Wrapper>
     )
