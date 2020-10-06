@@ -17,7 +17,9 @@ const Img = styled.img.attrs( props => ({
     className: props.className,
     src: props.src,
     alt: props.alt
-}))` margin: 20px`
+}))` margin: 20px;
+width:200px;    
+`
 
 const A = styled.a.attrs( props => ({
     className: props.className,
@@ -35,43 +37,44 @@ class MainPage extends Component{
             searchedPokemon:''
         }
     }
-    componentDidMount(){
-       
-        if (Object.keys(this.state.pokemon).length == 0 ) {
-            axios.get('./pokemons.json')
-            .then(res => {
-                const pokemon = res.data;
-                console.log(pokemon)
-                this.setState({ pokemon : pokemon });
-            })   
-        }else{
-            console.log("pas dans le if ")
+   async componentDidMount(){
+
+       if (localStorage.getItem("pokemon") === null) {
+        axios.get('./pokemons.json')
+        .then(res => {
+            const pokemon = res.data;
+            localStorage.setItem("pokemon",JSON.stringify( pokemon))
+            this.setState({ pokemon : pokemon });
             
-        }
+        })
+       }
+       else if (this.state.pokemon === "") {
+        this.setState({pokemon : JSON.parse(localStorage.getItem("pokemon"))})
+       }
     }
     
-   
-
 render(){
-    console.log("state",this.state)
-    console.log("lenght apres le if ",Object.keys(this.state.pokemon).length)
+    console.log("state dans le render: ",this.state)
+    
+ 
     return(
-        
-      /*  <div>
-          {TableauImages.map((info,index) => {      
-             return <Img src={require("../images/pokemon_"+info+".png")} className="img-thumbnail w-25" alt="" key={index}/>
-            //  C:\Users\Richard\projectos personales\pokedex\client\src\images\pokemon_1.png
-          })}
-        </div>*/
         <Wrapper className=".container">
-            <Title>Welcome Young Adventured</Title>
-            
+            <Title>Welcome Young Adventured</Title>      
             {/*<Wrapper className="list-group w-50">
                 {(this.state.pokemon ==='') ? '' : this.state.pokemon.results.map((info,index) => {      
                 return <A className="list-group-item list-group-item-action w-25 rounded shadow-sm" href={info.url} key={index} >{info.name} </A>
                 })}
             </Wrapper>*/}
-             
+            <div>
+                 <Title>Name :{this.state.pokemon.name}</Title>
+                 <Title>Order :{this.state.pokemon.order}</Title>
+                 
+                 <Title>Stats : { this.state.pokemon.stats === undefined ? <p>No data</p> : this.state.pokemon.stats[0].stat.name}</Title>
+                 <Title>Type : {this.state.pokemon.types === undefined ? <p>No Data</p> : this.state.pokemon.types[0].type.name}</Title>
+        
+                 <Img className="img-thumbnail" src={this.state.pokemon.sprites === undefined ? "undefined" : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
+
+            </div>
         </Wrapper>
     )
 }
