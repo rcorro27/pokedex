@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import axios from 'axios';
+import {Chart} from '../components'
+import '../Colors.css'
+
+
 
 
 
@@ -26,7 +30,6 @@ const A = styled.a.attrs( props => ({
     href: props.href,
 
 }))`margin: 5px`
-
 
 
 class MainPage extends Component{
@@ -58,67 +61,42 @@ render(){
     
  
     return(
-        <Wrapper className=".container border border-danger rounded bg-danger" >
-            <Title>Welcome Young Adventured</Title>    
-            <h3 className="bg-warning w-50 border border-warning rounded m-1">Name :{this.state.pokemon.name}</h3>  
-            {/*<Wrapper className="list-group w-50">
-                {(this.state.pokemon ==='') ? '' : this.state.pokemon.results.map((info,index) => {      
-                return <A className="list-group-item list-group-item-action w-25 rounded shadow-sm" href={info.url} key={index} >{info.name} </A>
-                })}
-            </Wrapper>*/}
-            <div>
-                
-                 <Img className="img-thumbnail" src={this.state.pokemon.sprites === undefined ? "undefined" : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
-                 <Title>Order :{this.state.pokemon.order}</Title>
-                 <div className="bg-light w-25">
-<h3>Stats :</h3>
-
-                 <table className="border border-dark rounded">
-                     <thead>
-                      <tr>
-                        <th>Name</th>
-                         <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        { this.state.pokemon.stats === undefined ? <td>No data</td> : this.state.pokemon.stats.map((info, index) => { 
-                           return(
-                            
-                           <td >{info.stat.name}</td>
-                           
-                          
-                            )
-                         })}
-                         </tr>
-                    </tbody>
-                        
-                    
-                    <tfoot>
-                    </tfoot>
-                    </table>
-                 
-                
-                  </div>
+        <Wrapper className=".container-fluid border border-danger rounded bg-danger w-75 m-1 mx-auto" >  
+            <div className="row">
+                <div className="col-sm">
+                     <h3 className="bg-light border border-warning rounded mt-1">Name :{this.state.pokemon.name}</h3>  
+                </div>
+                <div className="col-sm">
+                    <h3 className="bg-light border border-warning rounded mt-1">Order :{this.state.pokemon.order}</h3>
+                </div>
             </div>
-                 <Title>Type : {this.state.pokemon.types === undefined ? <p>No Data</p> : this.state.pokemon.types[0].type.name}</Title>
-                <div>
-                    <h2>Abilities :</h2>
+            <div className="row">
+                <div className="col-sm">
+                    <Img className="img-thumbnail" src={this.state.pokemon.sprites === undefined ? "undefined" : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
+                </div>
+                <div className="col-sm bg-light border-danger rounded mr-3">
+                    {this.state.pokemon.stats === undefined ? <h3>no data</h3> : <Chart data={this.state.pokemon.stats}/>}
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm ">
+                     <h3 className="bg-warning border-danger rounded ml-3 mt-1" >Type : {this.state.pokemon.types === undefined ? <p>No Data</p> : this.state.pokemon.types[0].type.name}</h3>
+                </div>
+                <div className="col-sm">
+                    <h3 className="bg-light border border-warning rounded mr-3 mt-1">Abilities :</h3>
                     {this.state.pokemon.abilities === undefined ? <p>No Data</p> : this.state.pokemon.abilities.map((info ,index) => {      
-                        return <A className="list-group-item list-group-item-action w-25 rounded shadow-sm" href={info.ability.url} key={index} >{info.ability.name} </A>
+                        return <A className="btn btn-light border-danger rounded ml-3" href={info.ability.url} key={index} >{info.ability.name} </A>
                     })}
-                </div>    
-                <div>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm">
                     <h1>Moves :</h1>
-                    {this.state.pokemon.moves === undefined ? <p>No Data</p> : this.state.pokemon.moves.map((info, index)=> {
-                        return <A className="list-group-item list-group-item-action w-25 rounded shadow-sm" href={info.move.url} key={index} >{info.move.name} </A>
-
-                    })}    
-                </div>            
-        
-                 
-
-            
+                        {this.state.pokemon.moves === undefined ? <p>No Data</p> : this.state.pokemon.moves.map((info, index)=> {
+                        return <A className="btn btn-light border-danger rounded ml-3" href={info.move.url} key={index} >{info.move.name} </A>
+                        })}  
+                </div>
+            </div>        
         </Wrapper>
     )
 }
