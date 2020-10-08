@@ -24,8 +24,7 @@ class Navbar extends Component{
                 <Nav>
                     <Logo/>
                     <Search/>
-                    
-                </Nav>
+                                    </Nav>
         </Container>  
         )
     }
