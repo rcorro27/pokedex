@@ -59,7 +59,7 @@ class MainPage extends Component{
 
 
    async handleAxio(params){
-        if (localStorage.getItem(this.state.searchedPokemon) === null) {
+        if (localStorage.getItem(this.state.searchedPokemon) === null /*|| localStorage.getItem(params) === null ajaouter un if plus tot que un autre considiton ici */) {
             
                 await axios.get(params)
                 .then(res => {
