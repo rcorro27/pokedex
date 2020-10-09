@@ -16,3 +16,7 @@
 .dragon{background-color :#723EFC;}
 .dark{background-color :#705749;}
 .fairy{background-color :#E1A4E1;}
+body{
+    background-image: url("../src/images/wallpaperpikachu.jpg") ;
+}
+.BasePokedex{background-color: #CC0000}

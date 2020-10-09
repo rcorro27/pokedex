@@ -5,20 +5,20 @@ const Wrapper=styled.div.attrs( props =>({
 
     className : props.className
 }))``
-const H1= styled.h1.attrs(props =>({
+/*const H1= styled.h1.attrs(props =>({
     className : props.className
-}))``
+}))``*/
 
 const Form= styled.form.attrs(props =>({
     className: props.className
 
 }))``
-const Input = styled.input.attrs(props =>({
+/*const Input = styled.input.attrs(props =>({
     className: props.className,
     type : props.type,
     placeholder : props.placeholder,
 
-}))``
+}))``*/
 
 class Search extends Component{
     render(){

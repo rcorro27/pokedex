@@ -6,8 +6,10 @@ import '../Colors.css'
 import iconPokebal  from '../images/pokeball.png'
 
 
+const Form= styled.form.attrs(props =>({
+    className: props.className
 
-
+}))``
 
 const Wrapper = styled.div.attrs( props => ({
     className: props.className,
@@ -15,22 +17,23 @@ const Wrapper = styled.div.attrs( props => ({
     margin: 0 30px;
     box-shadow: 10px 10px lightslategray;
 `
-const Title = styled.h1.attrs({
-    className: 'h1 mx-auto w-75',
+const Title = styled.h5.attrs({
+    className: 'bg-light border border-light rounded mt-1 ',
 })``
 
 const Img = styled.img.attrs( props => ({
-    className: props.className,
+    className: "img-thumbnail w-100 mb-2  mt-2",
     src: props.src,
     alt: props.alt
 }))`     
 `
-
 const A = styled.a.attrs( props => ({
-    className: props.className,
+    className: "btn btn-light border-light rounded mb-2 mt-1 m-1",
     href: props.href,
 
-}))`margin: 5px`
+}))``
+
+
 
 
 class MainPage extends Component{
@@ -40,11 +43,59 @@ class MainPage extends Component{
             pokemon:'',
             searchedPokemon:''
         }
+        this.handleSearch=this.handleSearch.bind(this)
+        this.handleChange=this.handleChange.bind(this)
+        this.handleAxio=this.handleAxio.bind(this)
+        
     }
+   async handleAxio(params){
+        if (localStorage.getItem(this.state.searchedPokemon) === null) {
+            
+                await axios.get(params)
+                .then(res => {
+                    const pokemonResult = res.data;
+                    localStorage.setItem(this.state.searchedPokemon,JSON.stringify(pokemonResult))
+                    this.setState({ pokemon : pokemonResult });
+                }) 
+                .catch(error => {
+                    if (error.response.status === 404) {
+                        alert(error.response.status+" error : pokemon not found")
+                    }else if (error.request) {
+                        alert("Network Problem, please reload page")
+                    }
+                 })  
+        }
+        if (this.state.pokemon !=="") {
+            console.log("dans le second if of axio")
+            this.setState({pokemon : JSON.parse(localStorage.getItem(this.state.searchedPokemon))})
+        }
+    }
+
+    handleSearch(event){
+        if (this.state.searchedPokemon !=="") {
+            const URL="https://pokeapi.co/api/v2/pokemon/"+this.state.searchedPokemon
+            console.log(URL)
+            this.handleAxio(URL)
+        }else{
+            alert('Please enter a valid name or id example : PIKACHU OR 1')
+        }
+        event.preventDefault()
+        
+        
+    }
+    handleChange(event){
+        if (event.target.value !=="") {
+            const pokemon=event.target.value.trim()
+            this.setState({searchedPokemon: pokemon})
+        }
+    }
+
+
+
    async componentDidMount(){
 
        if (localStorage.getItem("pokemon") === null) {
-        axios.get('./pokemons.json')
+        await axios.get('./pokemons.json')
         .then(res => {
             const pokemon = res.data;
             localStorage.setItem("pokemon",JSON.stringify( pokemon))
@@ -59,40 +110,46 @@ class MainPage extends Component{
     
 render(){
     console.log("state dans le render: ",this.state)
-    
- 
+    console.log(this.state.searchedPokemon,JSON.parse(localStorage.getItem(this.state.searchedPokemon)))
     return(
         <div className="bgBodyImage">       
-            <Wrapper className=".container border border-danger rounded bg-danger w-75 m-1 mx-auto" >  
+            <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
+            {/*NAME, ORDER , ABILITIES , ZONES ,  MOVES, EVOLUTIONS*/}
                 <div className="row mt-2 ">
-                    <div className="col-4 m-2 bg-warning ml-4 border border-light rounded">
-                        <h5 className="bg-light border border-warning rounded mt-1 " >{this.state.pokemon.name}</h5>
-                        <h5 className="bg-light border border-warning rounded mt-1 "> <img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</h5>  
-                        <h5 className="bg-light border border-warning rounded mt-1" >Type(s) : {this.state.pokemon.types === undefined ? <p>No Data</p> : this.state.pokemon.types[0].type.name}</h5>
+                    <div className={this.state.pokemon.types === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                        <Title>{this.state.pokemon.name}</Title>
+                        <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</Title>  
+                        <Title>Type(s) : {this.state.pokemon.types === undefined ? "No Data" : this.state.pokemon.types.map((info ,index) => info.type.name + " ")}</Title>
                     </div>
-                    <div className="col-3 bg-warning m-2 ml-3 border border-light rounded ">
-                        <h5 className="bg-light border border-warning rounded mr-3 mt-1">Abilities :</h5>
+
+                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded " : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                        <Title>Abilities :</Title>
                         {this.state.pokemon.abilities === undefined ? <p>No Data</p> : this.state.pokemon.abilities.map((info ,index) => {      
-                            return <A className="btn btn-light border-warning rounded" href={info.ability.url} key={index} >{info.ability.name} </A>
+                            return <A  href={info.ability.url} key={index} >{info.ability.name} </A>
                         })}
                     </div>
-                    <div className="col-3 bg-warning m-2 ml-4 border border-light rounded">
-                        <A className="btn btn-light border-warning rounded" href="" >Zones </A>
-                        <A className="btn btn-light border-warning rounded" href="" >Moves</A>
-                        <A className="btn btn-light border-warning rounded" href="" >Evolutions </A>
+                    
+                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded" : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name }>
+                        <A href="" >Zones </A>
+                        <A href="" >Moves</A>
+                        <A href="" >Evolutions </A>
                     </div>
                 
                 </div>
                 {/*IMAGE AND STATS*/}
-                <div className="row">
-                    <div className="col-3 bg-warning ml-4 mb-2 border border-light rounded">
-                        <Img className="img-thumbnail w-100 mb-2  mt-2" src={this.state.pokemon.sprites === undefined ? "undefined" : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
+                <div className="row mb-2">
+                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning ml-4 mb-2 border border-light rounded" : "col-3 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name }>
+                        <Img src={this.state.pokemon.sprites === undefined ? "undefined" : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
                     </div>
-                    <div className="col-5 bg-warning ml-4 mb-2 border border-light rounded">
-                        {this.state.pokemon.stats === undefined ? <h3>no data</h3> : <Chart height={300} width={450} data={this.state.pokemon.stats}/>}
+                    <div className={this.state.pokemon.types === undefined ? "col-5 bg-warning ml-4 mb-2 border border-light rounded": "col-5 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                        {this.state.pokemon.stats === undefined ? <Title>no data</Title> : <Chart height={300} width={450} data={this.state.pokemon.stats}/>}
                     </div>
                     <div className="col">
-                        <button className="btn btn-info border-warning rounded">Random Pokemon</button>
+                        <button className="btn btn-info border-light rounded w-75 ">Random Pokemon</button>
+                        <Form className='mt-2' onSubmit={this.handleSearch}>
+                            <input className="form-control w-75" type="search" placeholder="Name" aria-label="Search" onChange={this.handleChange}/>
+                            <input className="btn btn-dark mt-2 w-75"  type="submit" value="HERE WE GO!"/>
+                        </Form>
                     </div>
                     
                 </div>     

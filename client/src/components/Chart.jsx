@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import styled from 'styled-components'
-import { VictoryPie, VictoryLabel, VictoryTheme, VictoryBar, VictoryChart, VictoryPolarAxis } from 'victory'
-
+//import styled from 'styled-components'
+import { VictoryPie} from 'victory'
+// dont forget to import de what you want from victory before using it 
 
 class Chart extends Component{
 
