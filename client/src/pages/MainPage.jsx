@@ -4,6 +4,8 @@ import axios from 'axios';
 import {Chart} from '../components'
 import '../Colors.css'
 import iconPokebal  from '../images/pokeball.png'
+import wallpaperpikachu from '../images/wallpaperpikachu.jpg'
+
 
 
 const Form= styled.form.attrs(props =>({
@@ -46,8 +48,16 @@ class MainPage extends Component{
         this.handleSearch=this.handleSearch.bind(this)
         this.handleChange=this.handleChange.bind(this)
         this.handleAxio=this.handleAxio.bind(this)
-        
+        this.handleRandomPokemon=this.handleRandomPokemon.bind(this)
     }
+
+    handleRandomPokemon(){
+        const randonPokemon=Math.floor(Math.random() * 807 +1 )
+        console.log(randonPokemon)
+        this.handleAxio(randonPokemon)
+    }
+
+
    async handleAxio(params){
         if (localStorage.getItem(this.state.searchedPokemon) === null) {
             
@@ -58,15 +68,10 @@ class MainPage extends Component{
                     this.setState({ pokemon : pokemonResult });
                 }) 
                 .catch(error => {
-                    if (error.response.status === 404) {
-                        alert(error.response.status+" error : pokemon not found")
-                    }else if (error.request) {
-                        alert("Network Problem, please reload page")
-                    }
+                    this.setState({pokemon : "", searchedPokemon: ""})
                  })  
         }
         if (this.state.pokemon !=="") {
-            console.log("dans le second if of axio")
             this.setState({pokemon : JSON.parse(localStorage.getItem(this.state.searchedPokemon))})
         }
     }
@@ -74,14 +79,11 @@ class MainPage extends Component{
     handleSearch(event){
         if (this.state.searchedPokemon !=="") {
             const URL="https://pokeapi.co/api/v2/pokemon/"+this.state.searchedPokemon
-            console.log(URL)
             this.handleAxio(URL)
         }else{
             alert('Please enter a valid name or id example : PIKACHU OR 1')
         }
         event.preventDefault()
-        
-        
     }
     handleChange(event){
         if (event.target.value !=="") {
@@ -110,7 +112,7 @@ class MainPage extends Component{
     
 render(){
     console.log("state dans le render: ",this.state)
-    console.log(this.state.searchedPokemon,JSON.parse(localStorage.getItem(this.state.searchedPokemon)))
+    console.log(this.state.searchedPokemon,localStorage.getItem("ratata"))
     return(
         <div className="bgBodyImage">       
             <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
@@ -121,7 +123,7 @@ render(){
                         <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</Title>  
                         <Title>Type(s) : {this.state.pokemon.types === undefined ? "No Data" : this.state.pokemon.types.map((info ,index) => info.type.name + " ")}</Title>
                     </div>
-
+        
                     <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded " : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
                         <Title>Abilities :</Title>
                         {this.state.pokemon.abilities === undefined ? <p>No Data</p> : this.state.pokemon.abilities.map((info ,index) => {      
@@ -139,15 +141,15 @@ render(){
                 {/*IMAGE AND STATS*/}
                 <div className="row mb-2">
                     <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning ml-4 mb-2 border border-light rounded" : "col-3 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name }>
-                        <Img src={this.state.pokemon.sprites === undefined ? "undefined" : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
+                        <Img src={this.state.pokemon.sprites === undefined ? wallpaperpikachu : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
                     </div>
                     <div className={this.state.pokemon.types === undefined ? "col-5 bg-warning ml-4 mb-2 border border-light rounded": "col-5 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name}>
-                        {this.state.pokemon.stats === undefined ? <Title>no data</Title> : <Chart height={300} width={450} data={this.state.pokemon.stats}/>}
+                        { Array.isArray(this.state.pokemon.stats) && this.state.pokemon.stats.length ? <Chart height={300} width={450} data={this.state.pokemon.stats}/> : <Title>no data</Title> }
                     </div>
                     <div className="col">
-                        <button className="btn btn-info border-light rounded w-75 ">Random Pokemon</button>
+                        <button className="btn btn-info border-light rounded w-75 " onClick={this.handleRandomPokemon}>Random Pokemon</button>
                         <Form className='mt-2' onSubmit={this.handleSearch}>
-                            <input className="form-control w-75" type="search" placeholder="Name" aria-label="Search" onChange={this.handleChange}/>
+                            <input className="form-control w-75" type="search" placeholder="Name or Nro" aria-label="Search" onChange={this.handleChange}/>
                             <input className="btn btn-dark mt-2 w-75"  type="submit" value="HERE WE GO!"/>
                         </Form>
                     </div>
