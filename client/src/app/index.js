@@ -4,11 +4,13 @@ import {Navbar} from '../components'
 /*important de importer le bootstrap si non le style ne apparait pas*/
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import {MainPage} from '../pages'
+import {MainPage, ErrorPage, ErrorBoundary} from '../pages'
 function App() {
   return (
     <Router>
-      <MainPage/>
+      <ErrorBoundary>
+        <MainPage/>
+      </ErrorBoundary>
     </Router>
   )
 }
