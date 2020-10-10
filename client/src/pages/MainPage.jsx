@@ -53,18 +53,19 @@ class MainPage extends Component{
 
     handleRandomPokemon(){
         const randonPokemon=Math.floor(Math.random() * 807 +1 )
-        console.log(randonPokemon)
-        this.handleAxio(randonPokemon)
+        const URlRandom="https://pokeapi.co/api/v2/pokemon/"+randonPokemon
+        console.log(URlRandom)
+        this.handleAxio(URlRandom)
     }
 
 
    async handleAxio(params){
-        if (localStorage.getItem(this.state.searchedPokemon) === null /*|| localStorage.getItem(params) === null ajaouter un if plus tot que un autre considiton ici */) {
+        if (localStorage.getItem(params) === null /*|| localStorage.getItem(params) === null ajaouter un if plus tot que un autre considiton ici */) {
             
                 await axios.get(params)
                 .then(res => {
                     const pokemonResult = res.data;
-                    localStorage.setItem(this.state.searchedPokemon,JSON.stringify(pokemonResult))
+                    localStorage.setItem(params,JSON.stringify(pokemonResult))
                     this.setState({ pokemon : pokemonResult });
                 }) 
                 .catch(error => {
@@ -72,7 +73,7 @@ class MainPage extends Component{
                  })  
         }
         if (this.state.pokemon !=="") {
-            this.setState({pokemon : JSON.parse(localStorage.getItem(this.state.searchedPokemon))})
+            this.setState({pokemon : JSON.parse(localStorage.getItem(params))})
         }
     }
 
