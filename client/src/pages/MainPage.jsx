@@ -60,7 +60,7 @@ class MainPage extends Component{
 
 
    async handleAxio(params){
-        if (localStorage.getItem(params) === null /*|| localStorage.getItem(params) === null ajaouter un if plus tot que un autre considiton ici */) {
+        if (localStorage.getItem(params) === null) {
             
                 await axios.get(params)
                 .then(res => {
