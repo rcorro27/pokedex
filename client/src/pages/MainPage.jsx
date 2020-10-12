@@ -52,7 +52,7 @@ class MainPage extends Component{
     }
     /**set state for pokemon */
     setPokemonState(params){
-        this.setState({pokemon : {value : params} })
+        this.setState({pokemon : params })
     }
     /** set serached pokemon  */
     setSearchedPokemon(params){
@@ -150,21 +150,21 @@ render(){
         <div className="bgBodyImage">       
             <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
             {/*NAME, ORDER , ABILITIES , ZONES ,  MOVES, EVOLUTIONS*/}
-                <div className="row mt-2 ">
-                    <div className={this.state.pokemon.value.types === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.value.types[0].type.name}>
-                        <Title>{this.state.pokemon.value.name}</Title>
-                        <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.value.order}</Title>  
-                        <Title>Type(s) : {this.state.pokemon.value.types === undefined ? "No Data" : this.state.pokemon.value.types.map((info ,index) => info.type.name + " ")}</Title>
+                <div className="row mt-2 ">pokemon.value.types[0].type.name
+                    <div className={this.state.pokemon.value === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.value.types[0].type.name}>
+                        <Title>{this.state.pokemon.name}</Title>
+                        <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</Title>  
+                        <Title>Type(s) : {this.state.pokemon.types === undefined ? "No Data" : this.state.pokemon.types.map((info ,index) => info.type.name + " ")}</Title>
                     </div>
         
-                    <div className={this.state.pokemon.value.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded " : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.value.types[0].type.name}>
+                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded " : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
                         <Title>Abilities :</Title>
-                        {this.state.pokemon.value.abilities === undefined ? <p>No Data</p> : this.state.pokemon.value.abilities.map((info ,index) => {      
+                        {this.state.pokemon.abilities === undefined ? <p>No Data</p> : this.state.pokemon.abilities.map((info ,index) => {      
                             return <A  href={info.ability.url} key={index} >{info.ability.name} </A>
                         })}
                     </div>
                     
-                    <div className={this.state.pokemon.value.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded" : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.value.types[0].type.name }>
+                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded" : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name }>
                         <A href="" >Zones </A>
                         <A href="" >Moves</A>
                         <A href="" >Evolutions </A>
@@ -173,11 +173,11 @@ render(){
                 </div>
                 {/*IMAGE AND STATS*/}
                 <div className="row mb-2">
-                    <div className={this.state.pokemon.value.types === undefined ? "col-3 bg-warning ml-4 mb-2 border border-light rounded" : "col-3 ml-4 mb-2 border border-light rounded "+this.state.pokemon.value.types[0].type.name }>
+                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning ml-4 mb-2 border border-light rounded" : "col-3 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name }>
                         <Img src={this.state.pokemon.sprites === undefined ? wallpaperpikachu : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
                     </div>
-                    <div className={this.state.pokemon.value.types === undefined ? "col-5 bg-warning ml-4 mb-2 border border-light rounded": "col-5 ml-4 mb-2 border border-light rounded "+this.state.pokemon.value.types[0].type.name}>
-                        { Array.isArray(this.state.pokemon.value.stats) && this.state.pokemon.value.stats.length ? <Chart height={300} width={450} data={this.state.pokemon.value.stats}/> : <Title>no data</Title> }
+                    <div className={this.state.pokemon.types === undefined ? "col-5 bg-warning ml-4 mb-2 border border-light rounded": "col-5 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                        { Array.isArray(this.state.pokemon.stats) && this.state.pokemon.stats.length ? <Chart height={300} width={450} data={this.state.pokemon.stats}/> : <Title>no data</Title> }
                     </div>
                     <div className="col">
                         <button className="btn btn-info border-light rounded w-75 " onClick={this.handleRandomPokemon}>Random Pokemon</button>
