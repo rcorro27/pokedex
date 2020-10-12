@@ -6,8 +6,6 @@ import '../Colors.css'
 import iconPokebal  from '../images/pokeball.png'
 import wallpaperpikachu from '../images/wallpaperpikachu.jpg'
 
-
-
 const Form= styled.form.attrs(props =>({
     className: props.className
 
@@ -35,9 +33,6 @@ const A = styled.a.attrs( props => ({
 
 }))``
 
-
-
-
 class MainPage extends Component{
     constructor(props){
         super(props)
@@ -49,8 +44,35 @@ class MainPage extends Component{
         this.handleChange=this.handleChange.bind(this)
         this.handleAxio=this.handleAxio.bind(this)
         this.handleRandomPokemon=this.handleRandomPokemon.bind(this)
+        this.setPokemonState=this.setPokemonState.bind(this)
+        this.setSearchedPokemon=this.setSearchedPokemon.bind(this)
+        this.setLocalHostWithExpiration=this.setLocalHostWithExpiration.bind(this)
+        
+    }
+    /**set state for pokemon */
+    setPokemonState(params){
+        this.setState({pokemon : params })
+    }
+    /** set serached pokemon  */
+    setSearchedPokemon(params){
+        this.setState({searchedPokemon: params})
     }
 
+    /**set localstorage with a time limit  */
+    setLocalHostWithExpiration(key, value, ttl) {
+        const now = new Date()
+    
+        // `item` is an object which contains the original value
+        // as well as the time when it's supposed to expire
+        const item = {
+            value: value,
+            expiry: now.getTime() + ttl,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+    }
+    
+        
+    /*RAndom pokemon btw 1 and 807  */
     handleRandomPokemon(){
         const randonPokemon=Math.floor(Math.random() * 807 +1 )
         const URlRandom="https://pokeapi.co/api/v2/pokemon/"+randonPokemon
@@ -58,7 +80,7 @@ class MainPage extends Component{
         this.handleAxio(URlRandom)
     }
 
-
+    /* handle fetch to api  */
    async handleAxio(params){
         if (localStorage.getItem(params) === null) {
             
@@ -66,14 +88,16 @@ class MainPage extends Component{
                 .then(res => {
                     const pokemonResult = res.data;
                     localStorage.setItem(params,JSON.stringify(pokemonResult))
-                    this.setState({ pokemon : pokemonResult });
+                    this.setPokemonState(pokemonResult)
+                    //this.setState({ pokemon : pokemonResult });
                 }) 
                 .catch(error => {
                     this.setState({pokemon : "", searchedPokemon: ""})
                  })  
         }
         if (this.state.pokemon !=="") {
-            this.setState({pokemon : JSON.parse(localStorage.getItem(params))})
+            this.setPokemonState(JSON.parse(localStorage.getItem(params)))
+            //this.setState({pokemon : JSON.parse(localStorage.getItem(params))})
         }
     }
 
@@ -89,7 +113,8 @@ class MainPage extends Component{
     handleChange(event){
         if (event.target.value !=="") {
             const pokemon=event.target.value.trim()
-            this.setState({searchedPokemon: pokemon})
+            this.setSearchedPokemon(pokemon)
+           // this.setState({searchedPokemon: pokemon})
         }
     }
 
@@ -102,12 +127,14 @@ class MainPage extends Component{
         .then(res => {
             const pokemon = res.data;
             localStorage.setItem("pokemon",JSON.stringify( pokemon))
-            this.setState({ pokemon : pokemon });
+            this.setPokemonState(pokemon)
+            // this.setState({ pokemon : pokemon });
             
         })
        }
        else if (this.state.pokemon === "") {
-        this.setState({pokemon : JSON.parse(localStorage.getItem("pokemon"))})
+        this.setPokemonState(JSON.parse(localStorage.getItem("pokemon")))
+        //this.setState({pokemon : JSON.parse(localStorage.getItem("pokemon"))})
        }
     } 
     
