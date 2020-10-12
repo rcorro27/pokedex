@@ -150,7 +150,7 @@ render(){
         <div className="bgBodyImage">       
             <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
             {/*NAME, ORDER , ABILITIES , ZONES ,  MOVES, EVOLUTIONS*/}
-                <div className="row mt-2 ">pokemon.value.types[0].type.name
+                <div className="row mt-2 "> {/*voir le probleme dans le type*/ }
                     <div className={this.state.pokemon.value === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.value.types[0].type.name}>
                         <Title>{this.state.pokemon.name}</Title>
                         <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</Title>  
