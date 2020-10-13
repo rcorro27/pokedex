@@ -8,12 +8,19 @@ class Moves extends Component{
             moves:"",
         }
     }
-    render(){
-        return(
-            <div>
-                <h1>Moves to be inserted here </h1>
 
-            </div>
+    render(){
+        console.log("Moves dans le data de pokemon : ",this.props.data[0].move.name)
+        return(
+           
+                
+                <div style={{width: "30%", height: "40vh" , overflow : "scroll", display:"inline-block", backgroundColor:"blue"}}>
+                    <h1>Posibles Moves</h1>
+                    <ul>
+                        {this.props.data.map((moves,index) => {return <li style={{ textDecoration: "none"}} key={index}>{moves.move.name}</li>})}
+                    </ul>
+                </div>
+           
         )
     }
 }
