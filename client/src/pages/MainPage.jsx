@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import axios from 'axios';
 import {Chart} from '../components'
+import {Moves,Evolutions,Zones} from '../pages'
 import '../Colors.css'
 import iconPokebal  from '../images/pokeball.png'
 import wallpaperpikachu from '../images/wallpaperpikachu.jpg'
@@ -39,7 +40,10 @@ class MainPage extends Component{
         this.state={
             pokemon:'',
             searchedPokemon:'',
-            timeToExpired: 604800000
+            timeToExpired: 604800000,
+            moves:false,
+            showEvolution:false,
+            showZones:false
         }
         this.handleSearch=this.handleSearch.bind(this)
         this.handleChange=this.handleChange.bind(this)
@@ -49,7 +53,26 @@ class MainPage extends Component{
         this.setSearchedPokemon=this.setSearchedPokemon.bind(this)
         this.setLocalStorageWithExpiration=this.setLocalStorageWithExpiration.bind(this)
         this.getLocalStorage=this.getLocalStorage.bind(this)
+        this.setMoves=this.setMoves.bind(this)
+        this.setEvolution=this.setEvolution.bind(this)
+        this.setZones=this.setZones.bind(this)
         
+    }
+    setZones(){
+        let trueOrFalse=null
+        {this.state.showZones ? trueOrFalse=false : trueOrFalse=true }     
+        this.setState({showZones: trueOrFalse })
+    }
+    
+    setEvolution(){
+        let trueOrFalse=null
+        {this.state.showEvolution ? trueOrFalse=false : trueOrFalse=true }     
+        this.setState({showEvolution: trueOrFalse })
+    }
+    setMoves(){
+        let trueOrFalse=null
+        {this.state.moves ? trueOrFalse=false : trueOrFalse=true }     
+        this.setState({moves: trueOrFalse })
     }
     /**set state for pokemon */
     setPokemonState(params){
@@ -155,7 +178,9 @@ class MainPage extends Component{
     } 
     
 render(){
+    console.log(this.state)
     return(
+        
         <div className="bgBodyImage">       
             <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
             {/*NAME, ORDER , ABILITIES , ZONES ,  MOVES, EVOLUTIONS*/}
@@ -174,9 +199,9 @@ render(){
                     </div>
                     
                     <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded" : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name }>
-                        <A href="" >Zones </A>
-                        <A href="" >Moves</A>
-                        <A href="" >Evolutions </A>
+                        <button onClick={this.setZones} >Zones </button>
+                        <button onClick={this.setMoves}>Moves</button>
+                        <button onClick={this.setEvolution}>Evolutions </button>
                     </div>
                 
                 </div>
@@ -198,6 +223,13 @@ render(){
                     
                 </div>     
             </Wrapper>
+            <div style={{display:"inline-block", width: "80%", marginLeft: "12%", marginTop: "2%"}}>
+                
+                    {this.state.moves ? <Moves data={this.state.pokemon.moves} /> : ""}
+                    {this.state.showEvolution ? <Evolutions data={this.state.pokemon.id} /> : ""}
+                    {this.state.showZones ? <Zones data={this.state.pokemon.id} /> : ""}
+                
+            </div>
         </div>
 
     )
