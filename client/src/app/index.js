@@ -4,13 +4,16 @@ import {Navbar} from '../components'
 /*important de importer le bootstrap si non le style ne apparait pas*/
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import {MainPage, ErrorPage, ErrorBoundary} from '../pages'
+import {MainPage, ErrorPage, ErrorBoundary, Moves} from '../pages'
 function App() {
   return (
     <Router>
-      <ErrorBoundary>
-        <MainPage/>
-      </ErrorBoundary>
+      <Switch>
+        <Route  path="/moves" exact component={Moves}/>
+        <ErrorBoundary>
+          <MainPage/>
+        </ErrorBoundary>
+      </Switch>
     </Router>
   )
 }
