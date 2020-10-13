@@ -48,6 +48,7 @@ class MainPage extends Component{
         this.setPokemonState=this.setPokemonState.bind(this)
         this.setSearchedPokemon=this.setSearchedPokemon.bind(this)
         this.setLocalStorageWithExpiration=this.setLocalStorageWithExpiration.bind(this)
+        this.getLocalStorage=this.getLocalStorage.bind(this)
         
     }
     /**set state for pokemon */
@@ -57,6 +58,23 @@ class MainPage extends Component{
     /** set serached pokemon  */
     setSearchedPokemon(params){
         this.setState({searchedPokemon: params})
+    }
+    getLocalStorage(key) {
+        const itemToFind = localStorage.getItem(key)
+        // if the item doesn't exist, return null
+        if (!itemToFind) {
+            return null
+        }
+        const foundItem = JSON.parse(itemToFind)
+        const now = new Date()
+        // compare the expiry time of the item with the current time
+        if (now.getTime() > foundItem.expiry) {
+            // If the item is expired, delete the item from storage
+            // and return null
+            localStorage.removeItem(key)
+            return null
+        }
+        return foundItem.value
     }
 
     /**set localstorage with a time limit  */
@@ -85,24 +103,21 @@ class MainPage extends Component{
     /* handle fetch to api  */
    async handleAxio(params){
        console.log(params)
-        if (localStorage.getItem(params) === null) {
+        if (this.getLocalStorage(params) === null) {
             
                 await axios.get(params)
                 .then(res => {
                     const pokemonResult = res.data;
-                    console.log("dans le axio" , pokemonResult)
                     this.setLocalStorageWithExpiration(params,pokemonResult,this.state.timeToExpired)
-                   // localStorage.setItem(params,JSON.stringify(pokemonResult))
                     this.setPokemonState(pokemonResult)
-                    //this.setState({ pokemon : pokemonResult });
                 }) 
                 .catch(error => {
                     this.setState({pokemon : "", searchedPokemon: ""})
                  })  
         }
         if (this.state.pokemon !=="") {
-            this.setPokemonState(JSON.parse(localStorage.getItem(params)))
-            //this.setState({pokemon : JSON.parse(localStorage.getItem(params))})
+            const pokemonToState=this.getLocalStorage(params)
+            this.setPokemonState(pokemonToState)
         }
     }
 
@@ -117,9 +132,8 @@ class MainPage extends Component{
     }
     handleChange(event){
         if (event.target.value !=="") {
-            const pokemon=event.target.value.trim()
-            this.setSearchedPokemon(pokemon)
-           //this.setState({searchedPokemon: pokemon})
+            const searchedPokemon=event.target.value.trim()
+            this.setSearchedPokemon(searchedPokemon)
         }
     }
 
@@ -131,27 +145,22 @@ class MainPage extends Component{
         await axios.get('./pokemons.json')
         .then(res => {
             const pokemon = res.data;
-            localStorage.setItem("pokemon",JSON.stringify( pokemon))
-            this.setPokemonState(pokemon)
-            // this.setState({ pokemon : pokemon });
-            
+            this.setLocalStorageWithExpiration("pokemon", pokemon,this.state.timeToExpired)
+            this.setPokemonState(this.getLocalStorage(pokemon))
         })
        }
        else if (this.state.pokemon === "") {
-        this.setPokemonState(JSON.parse(localStorage.getItem("pokemon")))
-        //this.setState({pokemon : JSON.parse(localStorage.getItem("pokemon"))})
+        this.setPokemonState(this.getLocalStorage("pokemon"))
        }
     } 
     
 render(){
-    console.log("state dans le render: ",this.state)
-    console.log(this.state.searchedPokemon,localStorage.getItem("ratata"))
     return(
         <div className="bgBodyImage">       
             <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
             {/*NAME, ORDER , ABILITIES , ZONES ,  MOVES, EVOLUTIONS*/}
                 <div className="row mt-2 "> {/*voir le probleme dans le type*/ }
-                    <div className={this.state.pokemon.value === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.value.types[0].type.name}>
+                    <div className={this.state.pokemon.types === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
                         <Title>{this.state.pokemon.name}</Title>
                         <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</Title>  
                         <Title>Type(s) : {this.state.pokemon.types === undefined ? "No Data" : this.state.pokemon.types.map((info ,index) => info.type.name + " ")}</Title>
