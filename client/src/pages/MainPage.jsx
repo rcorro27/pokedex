@@ -125,7 +125,7 @@ class MainPage extends Component{
 
     /* handle fetch to api  */
    async handleAxio(params){
-       console.log(params)
+       console.log("dans le hanlde axio avant le if ",params)
         if (this.getLocalStorage(params) === null) {
             
                 await axios.get(params)
@@ -137,8 +137,8 @@ class MainPage extends Component{
                 .catch(error => {
                     this.setState({pokemon : "", searchedPokemon: ""})
                  })  
-        }
-        if (this.state.pokemon !=="") {
+        }else{
+            console.log("dans le dernier if ", this.state.pokemon)
             const pokemonToState=this.getLocalStorage(params)
             this.setPokemonState(pokemonToState)
         }
@@ -197,13 +197,13 @@ render(){
                             return <A  href={info.ability.url} key={index} >{info.ability.name} </A>
                         })}
                     </div>
-                    
+                    {/*
                     <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded" : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name }>
                         <button onClick={this.setZones} >Zones </button>
                         <button onClick={this.setMoves}>Moves</button>
                         <button onClick={this.setEvolution}>Evolutions </button>
                     </div>
-                
+                */}
                 </div>
                 {/*IMAGE AND STATS*/}
                 <div className="row mb-2">
