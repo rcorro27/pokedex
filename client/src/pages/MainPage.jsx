@@ -119,13 +119,11 @@ class MainPage extends Component{
     handleRandomPokemon(){
         const randonPokemon=Math.floor(Math.random() * 807 +1 )
         const URlRandom="https://pokeapi.co/api/v2/pokemon/"+randonPokemon
-        console.log(URlRandom)
         this.handleAxio(URlRandom)
     }
 
     /* handle fetch to api  */
    async handleAxio(params){
-       console.log("dans le hanlde axio avant le if ",params)
         if (this.getLocalStorage(params) === null) {
             
                 await axios.get(params)
@@ -138,7 +136,6 @@ class MainPage extends Component{
                     this.setState({pokemon : "", searchedPokemon: ""})
                  })  
         }else{
-            console.log("dans le dernier if ", this.state.pokemon)
             const pokemonToState=this.getLocalStorage(params)
             this.setPokemonState(pokemonToState)
         }
@@ -178,22 +175,22 @@ class MainPage extends Component{
     } 
     
 render(){
-    console.log(this.state)
-    return(
-        
+    const pokemon = (this.state.pokemon && this.state.pokemon.types);
+    const pokemonAbilities = (this.state.pokemon && this.state.pokemon.abilities);
+    return( 
         <div className="bgBodyImage">       
             <Wrapper className=".container border border-danger rounded  w-75 m-1 mt-4 mx-auto BasePokedex" >  
             {/*NAME, ORDER , ABILITIES , ZONES ,  MOVES, EVOLUTIONS*/}
-                <div className="row mt-2 "> {/*voir le probleme dans le type*/ }
-                    <div className={this.state.pokemon.types === undefined ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                <div className="row mt-2 ">
+                    <div className={ !pokemon ? "col-4 bg-warning m-2 ml-4 border border-light rounded" : "col-4 m-2 ml-4 border border-light rounded "+ pokemon[0].type.name}>
                         <Title>{this.state.pokemon.name}</Title>
                         <Title><img src={iconPokebal} alt="icon pokeball" width="50"/> {this.state.pokemon.order}</Title>  
-                        <Title>Type(s) : {this.state.pokemon.types === undefined ? "No Data" : this.state.pokemon.types.map((info ,index) => info.type.name + " ")}</Title>
+                        <Title>Type(s) : {!pokemon ? "No Data" : pokemon.map((info) => info.type.name + " ")}</Title>
                     </div>
         
-                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning m-2 ml-4 border border-light rounded " : "col-3 m-2 ml-4 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                    <div className={!pokemon ? "col-3 bg-warning m-2 ml-4 border border-light rounded " : "col-3 m-2 ml-4 border border-light rounded "+ pokemon[0].type.name}>
                         <Title>Abilities :</Title>
-                        {this.state.pokemon.abilities === undefined ? <p>No Data</p> : this.state.pokemon.abilities.map((info ,index) => {      
+                        {!pokemonAbilities ? <p>No Data</p> : pokemonAbilities.map((info ,index) => {      
                             return <A  href={info.ability.url} key={index} >{info.ability.name} </A>
                         })}
                     </div>
@@ -207,10 +204,10 @@ render(){
                 </div>
                 {/*IMAGE AND STATS*/}
                 <div className="row mb-2">
-                    <div className={this.state.pokemon.types === undefined ? "col-3 bg-warning ml-4 mb-2 border border-light rounded" : "col-3 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name }>
+                    <div className={!pokemon ? "col-3 bg-warning ml-4 mb-2 border border-light rounded" : "col-3 ml-4 mb-2 border border-light rounded "+ pokemon[0].type.name }>
                         <Img src={this.state.pokemon.sprites === undefined ? wallpaperpikachu : this.state.pokemon.sprites.front_default} alt={this.state.pokemon.name}/>
                     </div>
-                    <div className={this.state.pokemon.types === undefined ? "col-5 bg-warning ml-4 mb-2 border border-light rounded": "col-5 ml-4 mb-2 border border-light rounded "+this.state.pokemon.types[0].type.name}>
+                    <div className={!pokemon ? "col-5 bg-warning ml-4 mb-2 border border-light rounded": "col-5 ml-4 mb-2 border border-light rounded "+ pokemon[0].type.name}>
                         { Array.isArray(this.state.pokemon.stats) && this.state.pokemon.stats.length ? <Chart height={300} width={450} data={this.state.pokemon.stats}/> : <Title>no data</Title> }
                     </div>
                     <div className="col">
